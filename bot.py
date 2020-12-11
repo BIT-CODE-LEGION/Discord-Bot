@@ -22,7 +22,7 @@ async def on_ready():
     print(f'Using Discord.py Version {discord.__version__}')
     print('<------------------------------>')
 
-    activity = discord.Activity(name='my DMs |  DM me to send Mod Mali', type=discord.ActivityType.watching)
+    activity = discord.Activity(name='my DMs |  DM me to send Mod Mail', type=discord.ActivityType.watching)
     await client.change_presence(activity=activity)
 
 extensions = ['cogs.ModMail']
