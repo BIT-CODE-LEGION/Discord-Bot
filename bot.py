@@ -92,7 +92,17 @@ async def serverlink(ctx ):
     await ctx.send(embed= em)
     await ctx.send('https://discord.gg/SYjc9F2')
 
-
+@client.command(aliases = ['send'])    
+@commands.has_permissions(ban_members = True)
+async def senddm(ctx, member : discord.Member, *,content):
+            embed=discord.Embed(color =discord.Colour.purple())
+            embed=discord.Embed(title='📧 Reply for your ModMail ')
+            embed.add_field(name='💬Message :  '+ str(content), value="🟢From"  + str(ctx.author.mention))
+            await member.send(embed=embed)
+            em=discord.Embed(color =discord.Colour.purple())
+            em=discord.Embed(title=f'📧 sent to {member.mention}')
+            em.add_field(name='💬 Message : '+ str(content), value="🟢From"  + str(ctx.author.mention))
+            await ctx.send(embed = em)
 # @client.command()
 # async def rules(ctx ):
 #     em = discord.Embed( color = discord.Colour.blue())
