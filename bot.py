@@ -1,4 +1,5 @@
 import discord
+from discord import channel
 from discord.ext import commands
 import csv
 from itertools import cycle
@@ -8,12 +9,12 @@ import datetime
 from time import sleep
 from io import StringIO
 from datetime import datetime 
-
+from googletrans import Translator
 prefix = '>'
 token = 'NjkwMDE4MDY3MjQ1NDMyODgy.XnLTZw.PiWPVvNyrj9iBR5xN6mCV9yKGbM'
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True, help_command=None)
-
+bot = client
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -24,7 +25,25 @@ async def on_ready():
 
     activity = discord.Activity(name='my DMs |  DM me to send Mod Mail', type=discord.ActivityType.watching)
     await client.change_presence(activity=activity)
+translator = Translator(service_urls=['translate.googleapis.com'])
 
+
+@client.event
+async def on_message(msg):
+    if msg.channel.id in [788874033985749002]  :
+        channel = bot.get_channel(790106660201824257)
+        if msg.author == bot.user:
+            return
+        value = translator.translate(msg.content, dest='en')
+        now = datetime.now() 
+        
+        time = now.strftime('%Y-%m-%d  %H:%M')
+
+        em = discord.Embed(title = f"{msg.author} : `{value.text}`",color = discord.Colour.blue())
+        
+        await channel.send(embed = em)
+
+    
 extensions = ['cogs.ModMail']
 
 if __name__ == '__main__':
@@ -99,10 +118,16 @@ async def senddm(ctx, member : discord.Member, *,content):
             embed=discord.Embed(title='📧 Reply for your ModMail ')
             embed.add_field(name='💬Message :  '+ str(content), value="🟢From"  + str(ctx.author.mention))
             await member.send(embed=embed)
+            await ctx.message.delete()
             em=discord.Embed(color =discord.Colour.purple())
             em=discord.Embed(title=f'📧 sent to {member.mention}')
             em.add_field(name='💬 Message : '+ str(content), value="🟢From"  + str(ctx.author.mention))
             await ctx.send(embed = em)
+@client.command()
+async def role(ctx ):
+    em = discord.Embed( color = discord.Colour.blue())
+    em.set_image( url = 'https://media0.giphy.com/media/EtnZdHUE6rIqVs0oar/giphy.gif')
+    await ctx.send(embed= em)            
 # @client.command()
 # async def rules(ctx ):
 #     em = discord.Embed( color = discord.Colour.blue())
@@ -150,4 +175,8 @@ async def senddm(ctx, member : discord.Member, *,content):
 #     """ ,color = discord.Colour.blue())
 #     em2.set_image(url = 'https://imageshost.ru/images/2019/05/14/source.gif')
 #     await ctx.send(embed= em2)
+
+
+
+
 client.run(token)
